@@ -102,6 +102,10 @@ The core functions (`dstToXml`, `xmlToDst`, `decodeDst`, `encodeDst`, `dstSheets
 
 The CLI is isolated at the bottom of the file and setup so it only runs when the file is actually run as a Deno or Node script; importing the library in a browser skips it.
 
+## Notable references
+
+* [abrman/dst-edit](https://github.com/abrman/dst-edit) - browser-based `.dst` sheet set editor, and the starting point for this project. Its `bit-flip.ts` byte table covers the ASCII range, working out the pattern behind that table gave the block/`PERMUTE` formula above, which extends it to the full 31–254 range.
+
 ## License
 
 MIT - see [LICENSE](LICENSE).
