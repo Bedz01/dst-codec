@@ -105,6 +105,7 @@ The CLI is isolated at the bottom of the file and setup so it only runs when the
 ## Notable references
 
 * [abrman/dst-edit](https://github.com/abrman/dst-edit) - browser-based `.dst` sheet set editor, and the starting point for this project. Its `bit-flip.ts` byte table covers the ASCII range, working out the pattern behind that table gave the block/`PERMUTE` formula above, which extends it to the full 31–254 range.
+* [mxwell's `dst_format_ctl.py` gist](https://gist.github.com/mxwell/e253548692820cdce778631165090080) - Python script (2020) that recovers the substitution table by diffing a matching `.xml`/`.dst` pair, one UTF-8 character at a time. Its Cyrillic dictionary was a useful cross-check for the non-ASCII blocks. The cipher turns out to be per-byte rather than per-character, which is why a fixed formula works without paired files.
 
 ## License
 
