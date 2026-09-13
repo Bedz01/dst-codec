@@ -1,0 +1,10 @@
+{
+    "name": "dst-codec",
+    "version": "0.1.0",
+    "exports": "./dstCodec.js",
+    "tasks": {
+        "decode": "deno run -A dstCodec.js --to-xml",
+        "encode": "deno run -A dstCodec.js --to-dst",
+        "sheets": "deno run -A dstCodec.js --sheets"
+    }
+}
