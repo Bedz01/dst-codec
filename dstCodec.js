@@ -90,14 +90,14 @@ function substitute(src, map, what){
     const out = new Uint8Array(src.length);
     for(let i = 0; i < src.length; i++){
         const m = map(src[i]);
-        if(m === undefined && src[i] >= 0x80){
+        if(m === undefined){
             throw new Error(
                 `${what}: byte 0x${src[i].toString(16)} at offset ${i} is in a block this codec ` +
                 `doesn't have a confirmed base for yet (see the block table above BLOCK_BASE in ` +
                 `dstCodec.js, or README.md).`,
             );
         }
-        out[i] = m ?? src[i];
+        out[i] = m;
     }
     return out;
 }
@@ -113,11 +113,15 @@ export function decodeDst(dst){
 
 /**
  * XML text -> .dst bytes.
+ *
+ * Line endings are normalised to LF first. CR has no .dst byte, and XML parsers normalise
+ * CRLF / CR to LF on read anyway, so nothing is lost. CRLF shows up in practice from XML files
+ * saved on Windows and from Firefox's XMLSerializer, which writes CRLF after the XML declaration.
  * @param {string} xml
  * @returns {Uint8Array}
  */
 export function encodeDst(xml){
-    return substitute(new TextEncoder().encode(xml), xmlToDst, "encodeDst");
+    return substitute(new TextEncoder().encode(xml.replace(/\r\n?/g, "\n")), xmlToDst, "encodeDst");
 }
 
 /**

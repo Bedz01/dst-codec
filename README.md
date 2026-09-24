@@ -54,11 +54,15 @@ Block `0x8` is reserved for the separate `TAB`/`LF` substitutions, rather than b
 
 **LF encoding:** `encodeDst` writes `131` (AutoCAD's confirmed-safe LF byte) instead of ARES's `135`.
 
+**CR:** there is no `.dst` byte for CR, so `encodeDst` normalises CRLF and lone CR to LF before encoding. XML parsers perform the same normalisation on read, so nothing is lost. CRLF comes from XML files saved on Windows, and from Firefox's `XMLSerializer`, which writes CRLF after the XML declaration.
+
+**Unmapped bytes throw.** `decodeDst` and `encodeDst` throw on any byte without a mapping rather than passing it through. A passed-through byte lands on a `.dst` value that decodes as something else: a raw CR (`13`) decodes as DEL (`127`), which ARES rejects as invalid XML. After CR normalisation the only XML bytes that can throw are C0 control characters, which XML 1.0 does not allow in documents anyway.
+
 ### Every byte is substituted
 
 The cipher applies to **every byte**; there is no literal pass-through for XML syntax such as `<`, `>`, `&`, or `"`. These go through the same block/`PERMUTE` mapping as everything else.
 
-The only separate handling is for `TAB` and `LF`.
+The only separate handling is for `TAB`, `LF` and `CR`.
 
 ## Usage
 
